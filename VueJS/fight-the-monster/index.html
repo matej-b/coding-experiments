@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>Monster Slayer</title>
+      <script src="js/vue.js"></script>
+      <link rel="stylesheet" href="css/foundation.min.css">
+      <link rel="stylesheet" href="css/app.css">
+  </head>
+  <body>
+  <div id="app">
+    <section class="row">
+        <div class="small-6 columns">
+          <h1 class="text-center">YOU</h1>
+          <div class="healthbar">
+            <div class="healthbar text-center" style="background-color: green; margin: 0; color: white;" :style="{ width: player.hitpoints + '%' }">
+              <span class="left">{{ playerHp }}</span>
+            </div>
+          </div>
+          <div class="chatter text-center"></div>
+        </div>
+        <div class="small-6 columns">
+          <h1 class="text-center">MONSTER <span v-if="gameStarted">( SPECIALS: {{ monster.specialAttackCharges }})</span></h1>
+          <div class="healthbar">
+            <div class="healthbar text-center" style="background-color: green; margin: 0; color: white;" :style="{ width: monster.hitpoints + '%' }">
+              <span class="right">{{ monsterHp }}</span>
+            </div>
+          </div>
+          <div class="chatter text-center">{{ monster.chatter }}</div>
+        </div>
+    </section>
+    <section class="row controls" v-if="!gameStarted">
+      <div class="small-12 columns">
+        <button id="start-game" @click="startGame">START NEW GAME</button>
+      </div>
+    </section>
+    <section class="row controls" v-if="gameStarted">
+        <div class="small-12 columns">
+            <button id="attack" @click="attack('normalAttack', 'player')" :disabled="!isPlayersTurn" :title="normalAttackRange">ATTACK</button>
+            <button
+              id="special-attack"
+              @click="attack('specialAttack', 'player')"
+              :class="{ disabled: !playerCanPerformSpecial }"
+              :disabled="!playerCanPerformSpecial || !isPlayersTurn"
+              :title="specialAttackRange"
+            >SPECIAL ATTACK ({{ player.specialAttackCharges }})</button>
+            <button id="heal" @click="heal" :disabled="!isPlayersTurn" :title="healAmountRange">HEAL</button>
+            <button id="give-up" @click="stopGame('monster')" :disabled="!isPlayersTurn">GIVE UP</button>
+        </div>
+    </section>
+    <section class="row log" v-if="!gameStarted && winner !== ''">
+        <div class="small-12 columns">
+          <h4>{{ gameWinner }}</h4>
+        </div>
+    </section>
+    <section class="row log" v-if="attackLog.length > 0 || gameStarted">
+        <div class="small-12 columns">
+            <ul>
+                <li v-for="attack in attackLog" :class="[attack.player]">
+                  {{ attack.message }}
+                </li>
+            </ul>
+        </div>
+    </section>
+  </div>
+  <script src="js/index.js" charset="utf-8"></script>
+  </body>
+</html>
