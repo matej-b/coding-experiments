@@ -38,15 +38,13 @@ export default {
   methods: {
     handleComplaint (childComplaint) {
       this.children.find((child) => {
-        console.log(child.id);
-        console.log(childComplaint);
         if (childComplaint.id === child.id){
           this.child.complaint = childComplaint.complaint
         }
       })
     },
     handleClone (child) {
-      this.children.splice(this.childrenCount, 0, { name: `${child.name}'s clone`, complaint: ''})
+      this.children.splice(this.childrenCount, 0, { id: this.childrenCount + 1, name: `${child.name}'s clone`, complaint: ''})
     }
   }
 }

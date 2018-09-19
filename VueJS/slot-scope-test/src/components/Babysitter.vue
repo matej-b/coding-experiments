@@ -16,9 +16,6 @@ export default {
       type: Array
     }
   },
-  data: () => ({
-
-  }),
   methods: {
     clone (child) {
       this.$emit('clone', child)
